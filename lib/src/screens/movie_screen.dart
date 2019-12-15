@@ -15,7 +15,7 @@ const List<BottomNavigationBarItem> bottomNavigationBarItems = [
     title: Text('In theater'),
   ),
   BottomNavigationBarItem(
-    icon: Icon(Icons.rate_review),
+    icon: Icon(Icons.star),
     title: Text('Top Rated'),
   ),
 ];
