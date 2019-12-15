@@ -26,22 +26,7 @@ class MovieBloc {
     fetchTopRated();
     fetchInTheater();
   }
-
-  // fetchMovies([int movieType = 0]) async {
-  //   String type = movieType == 0 ? 'In Theater' : 'Top Rated';
-  //   movieListSink.add(ApiResponse.loading('Fetching $type Movies'));
-
-  //   try {
-  //     List<Movie> movies = (movieType == 0)
-  //         ? await _api.fetchInTheater()
-  //         : await _api.fetchTopRated();
-  //     movieListSink.add(ApiResponse.completed(movies));
-  //   } catch (e) {
-  //     movieListSink.add(ApiResponse.error(e.toString()));
-  //     print(e);
-  //   }
-  // }
-
+  
   fetchInTheater() async {
     movieListSink.add(ApiResponse.loading('Fetching In Theater Movies'));
     try {
