@@ -30,6 +30,62 @@ class _MovieScreenState extends State<MovieScreen> {
     _bloc = MovieBloc();
   }
 
+  Widget inTheaterList() {
+    return RefreshIndicator(
+      onRefresh: () => _bloc.fetchInTheater(),
+      child: StreamBuilder<ApiResponse<List<Movie>>>(
+        stream: _bloc.movieListStream,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            switch (snapshot.data.status) {
+              case Status.LOADING:
+                return Loading(loadingMessage: snapshot.data.message);
+                break;
+              case Status.COMPLETED:
+                return MovieList(movieList: snapshot.data.data);
+                break;
+              case Status.ERROR:
+                return Error(
+                  errorMessage: snapshot.data.message,
+                  onRetryPressed: () => _bloc.fetchInTheater(),
+                );
+                break;
+            }
+          }
+          return Container();
+        },
+      ),
+    );
+  }
+
+  Widget topRatedList() {
+    return RefreshIndicator(
+      onRefresh: () => _bloc.fetchTopRated(),
+      child: StreamBuilder<ApiResponse<List<Movie>>>(
+        stream: _bloc.topRatedStream,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            switch (snapshot.data.status) {
+              case Status.LOADING:
+                return Loading(loadingMessage: snapshot.data.message);
+                break;
+              case Status.COMPLETED:
+                return MovieList(movieList: snapshot.data.data);
+                break;
+              case Status.ERROR:
+                return Error(
+                  errorMessage: snapshot.data.message,
+                  onRetryPressed: () => _bloc.fetchTopRated(),
+                );
+                break;
+            }
+          }
+          return Container();
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,39 +95,19 @@ class _MovieScreenState extends State<MovieScreen> {
         backgroundColor: Colors.black,
       ),
       backgroundColor: Colors.black54,
-      body: RefreshIndicator(
-        onRefresh: () => _bloc.fetchMovies(_selectedIndex),
-        child: StreamBuilder<ApiResponse<List<Movie>>>(
-          stream: _bloc.movieListStream,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              switch (snapshot.data.status) {
-                case Status.LOADING:
-                  return Loading(loadingMessage: snapshot.data.message);
-                  break;
-                case Status.COMPLETED:
-                  return MovieList(movieList: snapshot.data.data);
-                  break;
-                case Status.ERROR:
-                  return Error(
-                    errorMessage: snapshot.data.message,
-                    onRetryPressed: () => _bloc.fetchMovies(_selectedIndex),
-                  );
-                  break;
-              }
-            }
-            return Container();
-          },
-        ),
+      body: IndexedStack(
+        index: _selectedIndex,
+        sizing: StackFit.expand,
+        children: [
+          inTheaterList(),
+          topRatedList()
+        ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: bottomNavigationBarItems,
         currentIndex: _selectedIndex,
         selectedItemColor: Theme.of(context).accentColor,
-        onTap: (index) { 
-          setState(() => _selectedIndex = index);
-          _bloc.fetchMovies(index);
-        },
+        onTap: (index) => setState(() => _selectedIndex = index),
       ),
     );
   }

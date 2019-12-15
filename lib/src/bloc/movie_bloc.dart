@@ -4,7 +4,6 @@ import 'package:movie_db_app/src/api/api_response.dart';
 import 'package:movie_db_app/src/api/themoviedb_api.dart';
 import 'package:movie_db_app/src/models/movie_model.dart';
 
-
 class MovieBloc {
   TheMovieDbApi _api;
 
@@ -13,18 +12,40 @@ class MovieBloc {
       _movieListController.sink;
   Stream<ApiResponse<List<Movie>>> get movieListStream =>
       _movieListController.stream;
-      
+
+  StreamController _topRatedController;
+  StreamSink<ApiResponse<List<Movie>>> get topRatedSink =>
+      _topRatedController.sink;
+  Stream<ApiResponse<List<Movie>>> get topRatedStream =>
+      _topRatedController.stream;
 
   MovieBloc() {
     _movieListController = StreamController<ApiResponse<List<Movie>>>();
+    _topRatedController = StreamController<ApiResponse<List<Movie>>>();
     _api = TheMovieDbApi();
-    fetchMovies();
+    fetchTopRated();
+    fetchInTheater();
   }
 
-  fetchMovies([int movieType = 0]) async {
+  // fetchMovies([int movieType = 0]) async {
+  //   String type = movieType == 0 ? 'In Theater' : 'Top Rated';
+  //   movieListSink.add(ApiResponse.loading('Fetching $type Movies'));
+
+  //   try {
+  //     List<Movie> movies = (movieType == 0)
+  //         ? await _api.fetchInTheater()
+  //         : await _api.fetchTopRated();
+  //     movieListSink.add(ApiResponse.completed(movies));
+  //   } catch (e) {
+  //     movieListSink.add(ApiResponse.error(e.toString()));
+  //     print(e);
+  //   }
+  // }
+
+  fetchInTheater() async {
     movieListSink.add(ApiResponse.loading('Fetching In Theater Movies'));
     try {
-      List<Movie> movies = (movieType == 0) ? await _api.fetchInTheater() : await _api.fetchTopRated();
+      List<Movie> movies = await _api.fetchInTheater();
       movieListSink.add(ApiResponse.completed(movies));
     } catch (e) {
       movieListSink.add(ApiResponse.error(e.toString()));
@@ -32,7 +53,19 @@ class MovieBloc {
     }
   }
 
+  fetchTopRated() async {
+    topRatedSink.add(ApiResponse.loading('Fetching Top Rated Movies'));
+    try {
+      List<Movie> movies = await _api.fetchTopRated();
+      topRatedSink.add(ApiResponse.completed(movies));
+    } catch (e) {
+      topRatedSink.add(ApiResponse.error(e.toString()));
+      print(e);
+    }
+  }
+
   dispose() {
     _movieListController?.close();
+    _topRatedController?.close();
   }
 }
