@@ -1,10 +1,13 @@
-import 'package:movie_db_app/src/api/api_response.dart';
-import 'package:movie_db_app/src/bloc/movie_bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:movie_db_app/src/api/api_response.dart';
+import 'package:movie_db_app/src/bloc/movie_bloc.dart';
 import 'package:movie_db_app/src/models/movie_model.dart';
+import 'package:movie_db_app/src/provider/movie_provider.dart';
 
 class MovieScreen extends StatefulWidget {
+  static const routeName = "movies";
+  
   @override
   _MovieScreenState createState() => _MovieScreenState();
 }
@@ -21,16 +24,9 @@ const List<BottomNavigationBarItem> bottomNavigationBarItems = [
 ];
 
 class _MovieScreenState extends State<MovieScreen> {
-  MovieBloc _bloc;
   int _selectedIndex = 0;
 
-  @override
-  void initState() {
-    super.initState();
-    _bloc = MovieBloc();
-  }
-
-  Widget inTheaterList() {
+  Widget inTheaterList(MovieBloc _bloc) {
     return RefreshIndicator(
       onRefresh: () => _bloc.fetchInTheater(),
       child: StreamBuilder<ApiResponse<List<Movie>>>(
@@ -58,7 +54,7 @@ class _MovieScreenState extends State<MovieScreen> {
     );
   }
 
-  Widget topRatedList() {
+  Widget topRatedList(MovieBloc _bloc) {
     return RefreshIndicator(
       onRefresh: () => _bloc.fetchTopRated(),
       child: StreamBuilder<ApiResponse<List<Movie>>>(
@@ -88,34 +84,31 @@ class _MovieScreenState extends State<MovieScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final _movieBloc = MovieProvider.of(context);
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
-        title: Text('TMDB App', style: TextStyle(color: Colors.yellow)),
-        backgroundColor: Colors.black,
+        title: Text('TMDB App', style: TextStyle(color: Theme.of(context).accentColor)),
+        backgroundColor: Theme.of(context).backgroundColor,
       ),
-      backgroundColor: Colors.black54,
+      backgroundColor: Theme.of(context).backgroundColor,
       body: IndexedStack(
         index: _selectedIndex,
         sizing: StackFit.expand,
         children: [
-          inTheaterList(),
-          topRatedList()
+          inTheaterList(_movieBloc),
+          topRatedList(_movieBloc)
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Theme.of(context).backgroundColor,
+        unselectedItemColor: Colors.grey,
         items: bottomNavigationBarItems,
         currentIndex: _selectedIndex,
         selectedItemColor: Theme.of(context).accentColor,
         onTap: (index) => setState(() => _selectedIndex = index),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _bloc.dispose();
-    super.dispose();
   }
 }
 
@@ -168,14 +161,14 @@ class Error extends StatelessWidget {
             errorMessage,
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: Colors.lightGreen,
+              color: Theme.of(context).accentColor,
               fontSize: 18,
             ),
           ),
           SizedBox(height: 8),
           RaisedButton(
-            color: Colors.yellow,
-            child: Text('Retry', style: TextStyle(color: Colors.white)),
+            color: Theme.of(context).backgroundColor,
+            child: Text('Retry', style: TextStyle(color: Theme.of(context).accentColor)),
             onPressed: onRetryPressed,
           )
         ],
@@ -199,13 +192,13 @@ class Loading extends StatelessWidget {
             loadingMessage,
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: Colors.yellow,
+              color: Theme.of(context).accentColor,
               fontSize: 24,
             ),
           ),
           SizedBox(height: 24),
           CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation<Color>(Colors.yellow),
+            valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).accentColor),
           ),
         ],
       ),
