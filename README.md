@@ -1,10 +1,14 @@
 # movie_db_app
 
-A new Flutter project.
+A demo flutter app that uses [The Movie DB APIs](https://developers.themoviedb.org/3)
+![Image description](/screenshots/tmdb_app.jpg)
 
-## Getting Started
+# Installation
+- [Flutter SDK](https://flutter.dev/docs/get-started/install)
+    - You might need to install XCode or Android Studio
+- [VSCode Setup](https://flutter.dev/docs/get-started/editor?tab=vscode)
 
-This project is a starting point for a Flutter application.
+# Flutter resources
 
 A few resources to get you started if this is your first Flutter project:
 
