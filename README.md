@@ -1,4 +1,4 @@
-# movie_db_app
+# The Movie DB App
 
 A demo flutter app that uses [The Movie DB APIs](https://developers.themoviedb.org/3)
 
