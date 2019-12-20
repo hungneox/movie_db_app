@@ -33,11 +33,19 @@ class MovieScreen extends StatelessWidget {
         backgroundColor: darkTheme.backgroundColor,
       ),
       backgroundColor: darkTheme.backgroundColor,
-      body: Center(
-        child: Card(
-          child: Padding(
-            padding: const EdgeInsets.all(4.0),
-            child: renderPoster(movie.posterPath),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Card(
+                child: renderPoster(movie.posterPath),
+              ),
+              Card(
+                child: Text(movie.overview)
+              )
+            ],
           ),
         ),
       ),
