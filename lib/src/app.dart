@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:movie_db_app/src/bloc/movie_bloc.dart';
 import 'package:movie_db_app/src/provider/movie_provider.dart';
-import 'package:movie_db_app/src/screens/movie_detail_screen.dart';
+import 'package:movie_db_app/src/screens/movie_list_screen.dart';
 import 'package:movie_db_app/src/screens/movie_screen.dart';
 
 class App extends StatelessWidget {
@@ -16,10 +16,11 @@ class App extends StatelessWidget {
           backgroundColor: Colors.grey[850],
           accentColor: Colors.amber,
         ),
-        home: MovieScreen(),
+        home: MovieListScreen(),
+        initialRoute: MovieScreen.routeName,
         routes: {
-            MovieScreen.routeName: (_) => MovieScreen(),
-            MovieDetailPage.routeName: (_) => MovieDetailPage()
+            MovieListScreen.routeName: (_) => MovieListScreen(),
+            MovieScreen.routeName: (_) => MovieScreen()
           },
       ),
     );
