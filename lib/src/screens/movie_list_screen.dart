@@ -5,6 +5,7 @@ import 'package:movie_db_app/src/bloc/movie_bloc.dart';
 import 'package:movie_db_app/src/models/movie_model.dart';
 import 'package:movie_db_app/src/provider/movie_provider.dart';
 import 'package:movie_db_app/src/screens/movie_screen.dart';
+import 'package:movie_db_app/src/screens/movie_screen_args.dart';
 
 class MovieListScreen extends StatefulWidget {
   static const routeName = "/movies";
@@ -132,7 +133,11 @@ class MovieList extends StatelessWidget {
               padding: const EdgeInsets.all(4.0),
               child: GestureDetector(
                 onTap: () {
-                   Navigator.pushNamed(context, MovieScreen.routeName);
+                  Navigator.pushNamed(
+                    context,
+                    MovieScreen.routeName,
+                    arguments: MovieScreenArguments(movieList[index].id),
+                  );
                 },
                 child: Image.network(
                   'https://image.tmdb.org/t/p/w342${movieList[index].posterPath}',

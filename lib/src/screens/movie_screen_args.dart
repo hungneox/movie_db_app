@@ -1,6 +1,5 @@
 class MovieScreenArguments {
-  final String title;
-  final String message;
-
-  MovieScreenArguments(this.title, this.message);
+  final int id;
+  
+  MovieScreenArguments(this.id);
 }

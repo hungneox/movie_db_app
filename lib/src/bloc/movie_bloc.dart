@@ -6,6 +6,7 @@ import 'package:movie_db_app/src/models/movie_model.dart';
 
 class MovieBloc {
   TheMovieDbApi _api;
+  List<Movie> allMovies = [];
 
   StreamController _movieListController;
   StreamSink<ApiResponse<List<Movie>>> get movieListSink =>
@@ -26,12 +27,13 @@ class MovieBloc {
     fetchTopRated();
     fetchInTheater();
   }
-  
+
   fetchInTheater() async {
     movieListSink.add(ApiResponse.loading('Fetching In Theater Movies'));
     try {
       List<Movie> movies = await _api.fetchInTheater();
       movieListSink.add(ApiResponse.completed(movies));
+      allMovies.addAll(movies);
     } catch (e) {
       movieListSink.add(ApiResponse.error(e.toString()));
       print(e);
@@ -43,10 +45,15 @@ class MovieBloc {
     try {
       List<Movie> movies = await _api.fetchTopRated();
       topRatedSink.add(ApiResponse.completed(movies));
+      allMovies.addAll(movies);
     } catch (e) {
       topRatedSink.add(ApiResponse.error(e.toString()));
       print(e);
     }
+  }
+
+  Movie findMovieById(int id) {
+    return allMovies.firstWhere((movie) => movie.id == id, orElse: () => Movie(0, 'Not found', 'Not found', null));
   }
 
   dispose() {
