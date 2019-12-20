@@ -1,6 +1,7 @@
 # movie_db_app
 
 A demo flutter app that uses [The Movie DB APIs](https://developers.themoviedb.org/3)
+
 ![Image description](/screenshots/tmdb_app.jpg)
 
 # Installation
